@@ -1,42 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <title>Molecule by testinfected</title>
 
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
-    <title>Molecule by testinfected</title>
   </head>
-
   <body>
-    <header>
-      <div class="inner">
-        <h1>Molecule</h1>
-        <h2>A Rack inspired web micro-framework for easy and fun Java Web Development</h2>
-        <a href="https://github.com/testinfected/molecule" class="button"><small>View project on</small>GitHub</a>
-      </div>
-    </header>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Molecule</h1>
+        <p class="header">A Rack inspired web micro-framework for easy and fun Java Web Development</p>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h2>
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/testinfected/molecule/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/testinfected/molecule/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/testinfected/molecule">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/testinfected">testinfected</a></p>
+
+
+      </header>
+      <section>
+        <p><a href="https://waffle.io/testinfected/molecule"><img src="https://badge.waffle.io/testinfected/molecule.png?label=ready&amp;title=Ready" alt="Stories Ready"></a>
+<a href="https://waffle.io/testinfected/molecule"><img src="https://badge.waffle.io/testinfected/molecule.png?label=In%20Progress&amp;title=Started" alt="Stories In Progress"></a>
+<a href="https://travis-ci.org/testinfected/molecule"><img src="https://travis-ci.org/testinfected/molecule.png?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/r/testinfected/molecule"><img src="https://coveralls.io/repos/testinfected/molecule/badge.png" alt="Coverage Status"></a></p>
+
+<h2>
 <a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting started</h2>
 
-<p>Build yourself using Buildr or Maven (for latest and greatest version), or simply download from Maven Central:</p>
+<p>Build yourself using <a href="http://www.gradle.org">Gradle</a> or <a href="http://buildr.apache.org">Buildr</a>, or simply download from Maven Central:</p>
 
 <div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
       <span class="nt">&lt;groupId&gt;</span>com.vtence.molecule<span class="nt">&lt;/groupId&gt;</span>
       <span class="nt">&lt;artifactId&gt;</span>molecule<span class="nt">&lt;/artifactId&gt;</span>
-      <span class="nt">&lt;version&gt;</span>0.2<span class="nt">&lt;/version&gt;</span>
+      <span class="nt">&lt;version&gt;</span>0.4-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</pre></div>
+
+<p>To use the default web server, you need to add <a href="http://www.simpleframework.org">Simple</a> as a dependency:</p>
+
+<div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
+      <span class="nt">&lt;groupId&gt;</span>org.simpleframework<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>simple<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;version&gt;</span>5.1.6<span class="nt">&lt;/version&gt;</span>
 <span class="nt">&lt;/dependency&gt;</span>
 </pre></div>
 
@@ -44,8 +60,7 @@
 
 <div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-        <span class="n">Server</span> <span class="n">server</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleServer</span><span class="o">(</span><span class="mi">8080</span><span class="o">);</span>
-
+        <span class="n">WebServer</span> <span class="n">server</span> <span class="o">=</span> <span class="n">WebServer</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
         <span class="n">server</span><span class="o">.</span><span class="na">run</span><span class="o">(</span><span class="k">new</span> <span class="n">Application</span><span class="o">()</span> <span class="o">{</span>
             <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handle</span><span class="o">(</span><span class="n">Request</span> <span class="n">request</span><span class="o">,</span> <span class="n">Response</span> <span class="n">response</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
                 <span class="n">response</span><span class="o">.</span><span class="na">body</span><span class="o">(</span><span class="s">"Hello, World"</span><span class="o">);</span>
@@ -64,34 +79,23 @@
 <p>Check out the examples:</p>
 
 <ul>
-<li><a href="https://github.com/testinfected/molecule/blob/master/examples/hello-world/src/com/vtence/molecule/examples/helloworld/HelloWorld.java">Hello World</a></li>
-<li><a href="https://github.com/testinfected/molecule/blob/master/examples/routing/src/com/vtence/molecule/examples/routing/Routing.java">Routing</a></li>
-<li><a href="https://github.com/testinfected/molecule/blob/master/examples/configuration/src/com/vtence/molecule/examples/configuration/ServerConfiguration.java">Server Configuration Options</a></li>
-<li><a href="https://github.com/testinfected/molecule/blob/master/examples/sessions/src/com/vtence/molecule/examples/session/EnablingSessions.java">Using Sessions</a></li>
-<li><a href="https://github.com/testinfected/molecule/blob/master/examples/middlewares/src/com/vtence/molecule/examples/middlewares/Middlewares.java">Available Middlewares - aka Filtering</a></li>
-<li><a href="https://github.com/testinfected/molecule/blob/master/examples/REST/src/com/vtence/molecule/examples/rest/REST.java">Simply RESTful</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/helloworld/HelloWorldExample.java">Hello World</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/basic/BasicExample.java">Basic Functionality</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/routing/RoutingExample.java">Routing</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/session/SessionExample.java">Sessions</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/rest/RESTExample.java">REST</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/files/StaticFilesExample.java">Static Files</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/templating/TemplatingExample.java">View Templating</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/examples/middlewares/src/com/vtence/molecule/examples/middlewares/Middlewares.java">Available Middlewares</a></li>
 <li><a href="https://github.com/testinfected/simple-petstore/blob/master/webapp/src/main/java/org/testinfected/petstore/PetStore.java">PetStore</a></li>
 </ul>
-        </section>
-
-        <aside id="sidebar">
-          <a href="https://github.com/testinfected/molecule/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/testinfected/molecule/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
-
-          <p class="repo-owner"><a href="https://github.com/testinfected/molecule"></a> is maintained by <a href="https://github.com/testinfected">testinfected</a>.</p>
-
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="http://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
     </div>
-
-            <script type="text/javascript">
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		          <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
           </script>
