@@ -28,21 +28,20 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <p><a href="https://travis-ci.org/testinfected/molecule"><img src="https://travis-ci.org/testinfected/molecule.png?branch=master" alt="Build Status"></a>
-<a href="https://coveralls.io/r/testinfected/molecule"><img src="https://coveralls.io/repos/testinfected/molecule/badge.png" alt="Coverage Status"></a>
-<a href="https://maven-badges.herokuapp.com/maven-central/com.vtence.molecule/molecule"><img src="https://maven-badges.herokuapp.com/maven-central/com.vtence.molecule/molecule/badge.svg" alt="Maven Central"></a>
-<a href="https://waffle.io/testinfected/molecule"><img src="https://badge.waffle.io/testinfected/molecule.png?label=In%20Progress&amp;title=Started" alt="Issues In Progress"></a></p>
+          <p><a href="https://travis-ci.org/testinfected/molecule"><img src="https://travis-ci.org/testinfected/molecule.svg?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/r/testinfected/molecule"><img src="https://img.shields.io/coveralls/testinfected/molecule.svg?style=flat" alt="Coverage Status"></a>
+<a href="https://maven-badges.herokuapp.com/maven-central/com.vtence.molecule/molecule"><img src="https://img.shields.io/maven-central/v/com.vtence.molecule/molecule.svg?style=flat" alt="Maven Central"></a>
+<a href="https://waffle.io/testinfected/molecule"><img src="https://badge.waffle.io/testinfected/molecule.svg?label=In%20Progress&amp;title=Started" alt="Issues In Progress"></a></p>
 
 <h2>
-<a name="quick-start" class="anchor" href="#quick-start"><span class="octicon octicon-link"></span></a>Quick Start</h2>
+<a id="quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick Start</h2>
 
-<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-        <span class="n">WebServer</span> <span class="n">server</span> <span class="o">=</span> <span class="n">WebServer</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
-        <span class="n">server</span><span class="o">.</span><span class="na">start</span><span class="o">((</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">response</span><span class="o">.</span><span class="na">body</span><span class="o">(</span><span class="s">"Hello, World"</span><span class="o">));</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
+<div class="highlight highlight-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">HelloWorld</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">String</span>[] <span class="pl-v">args</span>) <span class="pl-k">throws</span> <span class="pl-smi">IOException</span> {
+        <span class="pl-smi">WebServer</span> server <span class="pl-k">=</span> <span class="pl-smi">WebServer</span><span class="pl-k">.</span>create();
+        server<span class="pl-k">.</span>start((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> response<span class="pl-k">.</span>body(<span class="pl-s"><span class="pl-pds">"</span>Hello, World<span class="pl-pds">"</span></span>));
+    }
+}</pre></div>
 
 <p>Access your application at:</p>
 
@@ -50,51 +49,47 @@
 
 <p>If you don't use Java 8, it's almost as good:</p>
 
-<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
-        <span class="n">WebServer</span> <span class="n">server</span> <span class="o">=</span> <span class="n">WebServer</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
-        <span class="n">server</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="k">new</span> <span class="nf">Application</span><span class="o">()</span> <span class="o">{</span>
-            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">handle</span><span class="o">(</span><span class="n">Request</span> <span class="n">request</span><span class="o">,</span> <span class="n">Response</span> <span class="n">response</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-                <span class="n">response</span><span class="o">.</span><span class="na">body</span><span class="o">(</span><span class="s">"Hello, World"</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">});</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</pre></div>
+<div class="highlight highlight-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">HelloWorld</span> {
+    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">String</span>[] <span class="pl-v">args</span>) <span class="pl-k">throws</span> <span class="pl-smi">IOException</span> {
+        <span class="pl-smi">WebServer</span> server <span class="pl-k">=</span> <span class="pl-smi">WebServer</span><span class="pl-k">.</span>create();
+        server<span class="pl-k">.</span>start(<span class="pl-k">new</span> <span class="pl-smi">Application</span>() {
+            <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">handle</span>(<span class="pl-smi">Request</span> <span class="pl-v">request</span>, <span class="pl-smi">Response</span> <span class="pl-v">response</span>) <span class="pl-k">throws</span> <span class="pl-smi">Exception</span> {
+                response<span class="pl-k">.</span>body(<span class="pl-s"><span class="pl-pds">"</span>Hello, World<span class="pl-pds">"</span></span>);
+            }
+        });
+    }
+}</pre></div>
 
 <h2>
-<a name="download" class="anchor" href="#download"><span class="octicon octicon-link"></span></a>Download</h2>
+<a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
 
 <p>You can get the latest release version from Maven Central:</p>
 
-<div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
-      <span class="nt">&lt;groupId&gt;</span>com.vtence.molecule<span class="nt">&lt;/groupId&gt;</span>
-      <span class="nt">&lt;artifactId&gt;</span>molecule<span class="nt">&lt;/artifactId&gt;</span>
-      <span class="nt">&lt;version&gt;</span>0.4.1<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-</pre></div>
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+      &lt;<span class="pl-ent">groupId</span>&gt;com.vtence.molecule&lt;/<span class="pl-ent">groupId</span>&gt;
+      &lt;<span class="pl-ent">artifactId</span>&gt;molecule&lt;/<span class="pl-ent">artifactId</span>&gt;
+      &lt;<span class="pl-ent">version</span>&gt;0.8&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <p>If you want the development version, grab the latest snapshot from Sonatype snapshots repositories 
 (<code>https://oss.sonatype.org/content/repositories/snapshots</code>):</p>
 
-<div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
-      <span class="nt">&lt;groupId&gt;</span>com.vtence.molecule<span class="nt">&lt;/groupId&gt;</span>
-      <span class="nt">&lt;artifactId&gt;</span>molecule<span class="nt">&lt;/artifactId&gt;</span>
-      <span class="nt">&lt;version&gt;</span>0.5-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-</pre></div>
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+      &lt;<span class="pl-ent">groupId</span>&gt;com.vtence.molecule&lt;/<span class="pl-ent">groupId</span>&gt;
+      &lt;<span class="pl-ent">artifactId</span>&gt;molecule&lt;/<span class="pl-ent">artifactId</span>&gt;
+      &lt;<span class="pl-ent">version</span>&gt;0.9-SNAPSHOT&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <p>To use the default web server, you also need to add <a href="http://www.simpleframework.org">Simple</a> as a dependency:</p>
 
-<div class="highlight highlight-xml"><pre><span class="nt">&lt;dependency&gt;</span>
-      <span class="nt">&lt;groupId&gt;</span>org.simpleframework<span class="nt">&lt;/groupId&gt;</span>
-      <span class="nt">&lt;artifactId&gt;</span>simple<span class="nt">&lt;/artifactId&gt;</span>
-      <span class="nt">&lt;version&gt;</span>5.1.6<span class="nt">&lt;/version&gt;</span>
-<span class="nt">&lt;/dependency&gt;</span>
-</pre></div>
+<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+      &lt;<span class="pl-ent">groupId</span>&gt;org.simpleframework&lt;/<span class="pl-ent">groupId</span>&gt;
+      &lt;<span class="pl-ent">artifactId</span>&gt;simple-http&lt;/<span class="pl-ent">artifactId</span>&gt;
+      &lt;<span class="pl-ent">version</span>&gt;6.0.1&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <h2>
-<a name="want-to-start-with-some-code" class="anchor" href="#want-to-start-with-some-code"><span class="octicon octicon-link"></span></a>Want to start with some code?</h2>
+<a id="want-to-start-with-some-code" class="anchor" href="#want-to-start-with-some-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Want to start with some code?</h2>
 
 <p>Try out the following examples (Java 6 language level):</p>
 
@@ -104,80 +99,140 @@
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/routing/RoutingExample.java">Dynamic Routes</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/files/StaticFilesExample.java">Static Files</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/rest/RESTExample.java">REST</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/cookies/CookiesExample.java">Cookies</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/locale/LocaleNegotiationExample.java">Locale Negotiation</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/multipart/MultipartExample.java">Multipart Forms</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/templating/TemplatingAndLayoutExample.java">View Templates and Layout</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/session/SessionExample.java">HTTP Sessions</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/filtering/FilteringExample.java">Filters</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/middleware/CustomMiddlewareExample.java">Creating a Custom Middleware</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/performance/CachingAndCompressionExample.java">Caching and Compression</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/ssl/SSLExample.java">SSL</a></li>
 <li><a href="https://github.com/testinfected/simple-petstore/blob/master/webapp/src/main/java/org/testinfected/petstore/PetStore.java">A Sample Application</a></li>
 </ul>
 
 <h2>
-<a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>Getting Started</h2>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h2>
 
 <p>First thing first, you need a server to run your app:</p>
 
-<div class="highlight highlight-java"><pre><span class="n">WebServer</span> <span class="n">server</span> <span class="o">=</span> <span class="n">WebServer</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
-</pre></div>
+<div class="highlight highlight-java"><pre><span class="pl-smi">WebServer</span> server <span class="pl-k">=</span> <span class="pl-smi">WebServer</span><span class="pl-k">.</span>create();</pre></div>
 
 <p>This will set the default web server, which is powered by <a href="http://www.simpleframework.org">Simple</a>, 
 to run locally on port 8080.</p>
 
 <p>To start the server, give it an app:</p>
 
-<div class="highlight highlight-java"><pre><span class="n">server</span><span class="o">.</span><span class="na">start</span><span class="o">((</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">response</span><span class="o">.</span><span class="na">body</span><span class="o">(</span><span class="s">"Hello, World!"</span><span class="o">));</span>
-</pre></div>
+<div class="highlight highlight-java"><pre>server<span class="pl-k">.</span>start((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> response<span class="pl-k">.</span>body(<span class="pl-s"><span class="pl-pds">"</span>Hello, World!<span class="pl-pds">"</span></span>));</pre></div>
 
 <p>To stop the server, call the <em>stop</em> method:</p>
 
-<div class="highlight highlight-java"><pre><span class="n">server</span><span class="o">.</span><span class="na">stop</span><span class="o">()</span>
-</pre></div>
+<div class="highlight highlight-java"><pre>server<span class="pl-k">.</span>stop()</pre></div>
 
-<p>You can optionally specify the interface and port to bound to when creating the server, e.g.</p>
+<p>You can optionally specify the interface and port to bound to when creating the server, e.g. if you want to make your server globally available:</p>
 
-<div class="highlight highlight-java"><pre><span class="n">WebServer</span> <span class="n">server</span> <span class="o">=</span> <span class="n">WebServer</span><span class="o">.</span><span class="na">create</span><span class="o">(</span><span class="s">"0.0.0.0"</span><span class="o">,</span> <span class="mi">8088</span><span class="o">);</span>
-</pre></div>
+<div class="highlight highlight-java"><pre><span class="pl-smi">WebServer</span> server <span class="pl-k">=</span> <span class="pl-smi">WebServer</span><span class="pl-k">.</span>create(<span class="pl-s"><span class="pl-pds">"</span>0.0.0.0<span class="pl-pds">"</span></span>, <span class="pl-c1">8088</span>);</pre></div>
 
 <h2>
-<a name="routing" class="anchor" href="#routing"><span class="octicon octicon-link"></span></a>Routing</h2>
+<a id="routing" class="anchor" href="#routing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Routing</h2>
 
-<p>Routes let you route incoming requests to different applications based on the request verb and path. A route is composed
+<p>Most modern webapps have nice URLs. Simple URLs are also easier to remember and more user friendly. </p>
+
+<p>Molecule comes with a routing middleware that let you define your URL routes. </p>
+
+<p>Routes let you map incoming requests to different applications based on the request verb and path. A route is composed
 of a path pattern, an optional set of verbs to match, and an application endpoint: </p>
 
-<div class="highlight highlight-java"><pre><span class="n">server</span><span class="o">.</span><span class="na">start</span><span class="o">(</span><span class="k">new</span> <span class="nf">DynamicRoutes</span><span class="o">()</span> <span class="o">{{</span>
-    <span class="n">get</span><span class="o">(</span><span class="s">"/posts/:id"</span><span class="o">).</span><span class="na">to</span><span class="o">((</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
-        <span class="c1">// retrieve a given post</span>
-    <span class="o">});</span>
-    <span class="n">post</span><span class="o">(</span><span class="s">"/posts"</span><span class="o">).</span><span class="na">to</span><span class="o">((</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
-        <span class="c1">// create a new post</span>
-    <span class="o">});</span> 
-    <span class="n">put</span><span class="o">(</span><span class="s">"/posts/:id"</span><span class="o">).</span><span class="na">to</span><span class="o">((</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
-        <span class="c1">// update an existing post</span>
-    <span class="o">});</span>
-    <span class="n">delete</span><span class="o">(</span><span class="s">"/posts/:id"</span><span class="o">).</span><span class="na">to</span><span class="o">((</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
-        <span class="c1">// delete a post</span>
-    <span class="o">});</span> 
-    <span class="n">map</span><span class="o">(</span><span class="s">"/"</span><span class="o">).</span><span class="na">to</span><span class="o">((</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
-        <span class="c1">// show the home page</span>
-    <span class="o">});</span>
-<span class="o">}});</span>
-</pre></div>
+<div class="highlight highlight-java"><pre>server<span class="pl-k">.</span>start(<span class="pl-k">new</span> <span class="pl-smi">DynamicRoutes</span>() {{
+    get(<span class="pl-s"><span class="pl-pds">"</span>/posts/:id<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>to((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
+        <span class="pl-c">// retrieve a given post</span>
+    });
+    post(<span class="pl-s"><span class="pl-pds">"</span>/posts<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>to((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
+        <span class="pl-c">// create a new post</span>
+    }); 
+    put(<span class="pl-s"><span class="pl-pds">"</span>/posts/:id<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>to((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
+        <span class="pl-c">// update an existing post</span>
+    });
+    delete(<span class="pl-s"><span class="pl-pds">"</span>/posts/:id<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>to((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
+        <span class="pl-c">// delete a post</span>
+    }); 
+    map(<span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>to((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
+        <span class="pl-c">// show the home page</span>
+    });
+}});</pre></div>
+
+<h3>
+<a id="matching" class="anchor" href="#matching" aria-hidden="true"><span class="octicon octicon-link"></span></a>Matching</h3>
 
 <p>Routes are matched in the order they are defined. If not defined route matches, the default behaviour is to 
-render a 404 Not Found. This behaviour is configurable by providing the default application to route to when no route is matched.</p>
+render a 404 Not Found. This can be configured to pass the control to any default application.</p>
+
+<p>By default, a route matches a single verb, specified by the method you use, i.e. <em>get</em>, <em>post</em>, <em>put</em>, <em>delete</em>.
+That can be changed by providing the verbs as arguments to the <em>via</em> method:</p>
+
+<div class="highlight highlight-java"><pre>map(<span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>via(<span class="pl-c1">GET</span>, <span class="pl-c1">HEAD</span>)<span class="pl-k">.</span>to((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
+    <span class="pl-c">// show the home page</span>
+});</pre></div>
+
+<p>If you don't provide any verbs, <em>map</em> will match on all verbs.</p>
+
+<h3>
+<a id="dynamic-parameters" class="anchor" href="#dynamic-parameters" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dynamic Parameters</h3>
 
 <p>Route patterns can be matched exactly - they are said to be static - or can include named parameters,
  which are then accessible as regular request parameters on the request object:</p>
 
-<div class="highlight highlight-java"><pre><span class="c1">// matches "GET /photos/18" and "GET /photos/25"</span>
-<span class="c1">// request.parameter("id") is either '18' or '25'</span>
-<span class="n">get</span><span class="o">(</span><span class="s">"/photos/:id"</span><span class="o">,</span> <span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="o">{</span>
-    <span class="n">response</span><span class="o">.</span><span class="na">body</span><span class="o">(</span><span class="s">"Photo #"</span> <span class="o">+</span> <span class="n">request</span><span class="o">.</span><span class="na">parameter</span><span class="o">(</span><span class="s">"id"</span><span class="o">));</span>
-<span class="o">});</span>
-</pre></div>
+<div class="highlight highlight-java"><pre><span class="pl-c">// matches "GET /photos/18" and "GET /photos/25"</span>
+<span class="pl-c">// request.parameter("id") is either '18' or '25'</span>
+get(<span class="pl-s"><span class="pl-pds">"</span>/photos/:id<span class="pl-pds">"</span></span>, (request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
+    response<span class="pl-k">.</span>body(<span class="pl-s"><span class="pl-pds">"</span>Photo #<span class="pl-pds">"</span></span> <span class="pl-k">+</span> request<span class="pl-k">.</span>parameter(<span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>));
+});</pre></div>
+
+<h3>
+<a id="custom-matching" class="anchor" href="#custom-matching" aria-hidden="true"><span class="octicon octicon-link"></span></a>Custom Matching</h3>
+
+<p>You are not limited to the provided match patterns. You can easily implement your own matcher and decide exactly how to match an incoming url to an application.</p>
+
+<p>To do this, use the route definition methods that accept a <em>Matcher</em> rather than a <em>String</em>.</p>
 
 <h2>
-<a name="middlewares" class="anchor" href="#middlewares"><span class="octicon octicon-link"></span></a>Middlewares</h2>
+<a id="working-with-the-request" class="anchor" href="#working-with-the-request" aria-hidden="true"><span class="octicon octicon-link"></span></a>Working with the Request</h2>
+
+<h3>
+<a id="request-object" class="anchor" href="#request-object" aria-hidden="true"><span class="octicon octicon-link"></span></a>Request Object</h3>
+
+<h3>
+<a id="attributes" class="anchor" href="#attributes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Attributes</h3>
+
+<h3>
+<a id="cookies" class="anchor" href="#cookies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cookies</h3>
+
+<h2>
+<a id="working-with-the-response" class="anchor" href="#working-with-the-response" aria-hidden="true"><span class="octicon octicon-link"></span></a>Working with the Response</h2>
+
+<h3>
+<a id="response-object" class="anchor" href="#response-object" aria-hidden="true"><span class="octicon octicon-link"></span></a>Response Object</h3>
+
+<h3>
+<a id="bodies" class="anchor" href="#bodies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bodies</h3>
+
+<h3>
+<a id="redirection-and-errors" class="anchor" href="#redirection-and-errors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Redirection and Errors</h3>
+
+<h2>
+<a id="sessions" class="anchor" href="#sessions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sessions</h2>
+
+<h2>
+<a id="rendering-templates" class="anchor" href="#rendering-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rendering Templates</h2>
+
+<h2>
+<a id="view-layouts" class="anchor" href="#view-layouts" aria-hidden="true"><span class="octicon octicon-link"></span></a>View Layouts</h2>
+
+<h2>
+<a id="testing" class="anchor" href="#testing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing</h2>
+
+<h2>
+<a id="middlewares" class="anchor" href="#middlewares" aria-hidden="true"><span class="octicon octicon-link"></span></a>Middlewares</h2>
 
 <p>Middlewares are a way to enhance your application with optional building blocks, using a pipeline design. </p>
 
@@ -206,6 +261,34 @@ has several benefits:</p>
 <li>Security, to prevent attacks such as CSRF</li>
 <li>Processing, to actually process the request</li>
 </ol>
+
+<h3>
+<a id="available-middlewares" class="anchor" href="#available-middlewares" aria-hidden="true"><span class="octicon octicon-link"></span></a>Available Middlewares</h3>
+
+<p>Molecule comes with a number of middlewares (more are coming), that you can use to build your processing pipeline:</p>
+
+<ul>
+<li>Router (See <a href="http://https://github.com/testinfected/molecule#routing">Routing</a>)</li>
+<li>Static Assets </li>
+<li>File Server</li>
+<li>Access Log</li>
+<li>Cookies</li>
+<li>Locale Negotiation</li>
+<li>Compression</li>
+<li>ETag</li>
+<li>Conditional Get</li>
+<li>Connection Scope</li>
+<li>Server Header</li>
+<li>Date Header</li>
+<li>Content-Length Header</li>
+<li>Filter Map</li>
+<li>Cookie Session Tracker</li>
+<li>Fail Safe</li>
+<li>Failure Monitor</li>
+<li>Not Found</li>
+<li>Http Method Override</li>
+<li>Layout</li>
+</ul>
         </section>
 
         <aside id="sidebar">
