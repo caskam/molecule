@@ -1,45 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
+    <meta charset="UTF-8">
     <title>Molecule by testinfected</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
-    <header>
-      <div class="inner">
-        <h1>Molecule</h1>
-        <h2>A Rack inspired web micro-framework for easy and fun Java Web Development</h2>
-        <a href="https://github.com/testinfected/molecule" class="button"><small>View project on</small> GitHub</a>
-      </div>
-    </header>
+    <section class="page-header">
+      <h1 class="project-name">Molecule</h1>
+      <h2 class="project-tagline">A Rack inspired web micro-framework for easy and fun Java Web Development</h2>
+      <a href="https://github.com/testinfected/molecule" class="btn">View on GitHub</a>
+      <a href="https://github.com/testinfected/molecule/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/testinfected/molecule/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <p><a href="https://travis-ci.org/testinfected/molecule"><img src="https://travis-ci.org/testinfected/molecule.svg?branch=master" alt="Build Status"></a>
-<a href="https://coveralls.io/r/testinfected/molecule"><img src="https://img.shields.io/coveralls/testinfected/molecule.svg?style=flat" alt="Coverage Status"></a>
-<a href="https://maven-badges.herokuapp.com/maven-central/com.vtence.molecule/molecule"><img src="https://img.shields.io/maven-central/v/com.vtence.molecule/molecule.svg?style=flat" alt="Maven Central"></a>
-<a href="https://waffle.io/testinfected/molecule"><img src="https://badge.waffle.io/testinfected/molecule.svg?label=In%20Progress&amp;title=Started" alt="Issues In Progress"></a></p>
-
-<h2>
+    <section class="main-content">
+      <h2>
 <a id="quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick Start</h2>
 
-<div class="highlight highlight-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">HelloWorld</span> {
+<div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">HelloWorld</span> {
     <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">String</span>[] <span class="pl-v">args</span>) <span class="pl-k">throws</span> <span class="pl-smi">IOException</span> {
         <span class="pl-smi">WebServer</span> server <span class="pl-k">=</span> <span class="pl-smi">WebServer</span><span class="pl-k">.</span>create();
-        server<span class="pl-k">.</span>start((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> response<span class="pl-k">.</span>body(<span class="pl-s"><span class="pl-pds">"</span>Hello, World<span class="pl-pds">"</span></span>));
+        server<span class="pl-k">.</span>start((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> response<span class="pl-k">.</span>done(<span class="pl-s"><span class="pl-pds">"</span>Hello, World<span class="pl-pds">"</span></span>));
     }
 }</pre></div>
 
@@ -47,42 +33,29 @@
 
 <p><code>http://localhost:8080</code></p>
 
-<p>If you don't use Java 8, it's almost as good:</p>
-
-<div class="highlight highlight-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">HelloWorld</span> {
-    <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">String</span>[] <span class="pl-v">args</span>) <span class="pl-k">throws</span> <span class="pl-smi">IOException</span> {
-        <span class="pl-smi">WebServer</span> server <span class="pl-k">=</span> <span class="pl-smi">WebServer</span><span class="pl-k">.</span>create();
-        server<span class="pl-k">.</span>start(<span class="pl-k">new</span> <span class="pl-smi">Application</span>() {
-            <span class="pl-k">public</span> <span class="pl-k">void</span> <span class="pl-en">handle</span>(<span class="pl-smi">Request</span> <span class="pl-v">request</span>, <span class="pl-smi">Response</span> <span class="pl-v">response</span>) <span class="pl-k">throws</span> <span class="pl-smi">Exception</span> {
-                response<span class="pl-k">.</span>body(<span class="pl-s"><span class="pl-pds">"</span>Hello, World<span class="pl-pds">"</span></span>);
-            }
-        });
-    }
-}</pre></div>
-
 <h2>
 <a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
 
 <p>You can get the latest release version from Maven Central:</p>
 
-<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
       &lt;<span class="pl-ent">groupId</span>&gt;com.vtence.molecule&lt;/<span class="pl-ent">groupId</span>&gt;
       &lt;<span class="pl-ent">artifactId</span>&gt;molecule&lt;/<span class="pl-ent">artifactId</span>&gt;
-      &lt;<span class="pl-ent">version</span>&gt;0.8&lt;/<span class="pl-ent">version</span>&gt;
+      &lt;<span class="pl-ent">version</span>&gt;0.9&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <p>If you want the development version, grab the latest snapshot from Sonatype snapshots repositories 
 (<code>https://oss.sonatype.org/content/repositories/snapshots</code>):</p>
 
-<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
       &lt;<span class="pl-ent">groupId</span>&gt;com.vtence.molecule&lt;/<span class="pl-ent">groupId</span>&gt;
       &lt;<span class="pl-ent">artifactId</span>&gt;molecule&lt;/<span class="pl-ent">artifactId</span>&gt;
-      &lt;<span class="pl-ent">version</span>&gt;0.9-SNAPSHOT&lt;/<span class="pl-ent">version</span>&gt;
+      &lt;<span class="pl-ent">version</span>&gt;0.10-SNAPSHOT&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <p>To use the default web server, you also need to add <a href="http://www.simpleframework.org">Simple</a> as a dependency:</p>
 
-<div class="highlight highlight-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
       &lt;<span class="pl-ent">groupId</span>&gt;org.simpleframework&lt;/<span class="pl-ent">groupId</span>&gt;
       &lt;<span class="pl-ent">artifactId</span>&gt;simple-http&lt;/<span class="pl-ent">artifactId</span>&gt;
       &lt;<span class="pl-ent">version</span>&gt;6.0.1&lt;/<span class="pl-ent">version</span>&gt;
@@ -91,7 +64,7 @@
 <h2>
 <a id="want-to-start-with-some-code" class="anchor" href="#want-to-start-with-some-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Want to start with some code?</h2>
 
-<p>Try out the following examples (Java 6 language level):</p>
+<p>Try out the following examples:</p>
 
 <ul>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/helloworld/HelloWorldExample.java">Hello World</a></li>
@@ -99,11 +72,13 @@
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/routing/RoutingExample.java">Dynamic Routes</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/files/StaticFilesExample.java">Static Files</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/rest/RESTExample.java">REST</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/async/AsyncExample.java">Asynchronous Processing</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/cookies/CookiesExample.java">Cookies</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/locale/LocaleNegotiationExample.java">Locale Negotiation</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/multipart/MultipartExample.java">Multipart Forms</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/templating/TemplatingAndLayoutExample.java">View Templates and Layout</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/session/SessionExample.java">HTTP Sessions</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/multiapps/MultiAppsExample.java">Multiple Applications</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/filtering/FilteringExample.java">Filters</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/middleware/CustomMiddlewareExample.java">Creating a Custom Middleware</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/performance/CachingAndCompressionExample.java">Caching and Compression</a></li>
@@ -116,22 +91,39 @@
 
 <p>First thing first, you need a server to run your app:</p>
 
-<div class="highlight highlight-java"><pre><span class="pl-smi">WebServer</span> server <span class="pl-k">=</span> <span class="pl-smi">WebServer</span><span class="pl-k">.</span>create();</pre></div>
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">WebServer</span> server <span class="pl-k">=</span> <span class="pl-smi">WebServer</span><span class="pl-k">.</span>create();</pre></div>
 
 <p>This will set the default web server, which is powered by <a href="http://www.simpleframework.org">Simple</a>, 
 to run locally on port 8080.</p>
 
 <p>To start the server, give it an app:</p>
 
-<div class="highlight highlight-java"><pre>server<span class="pl-k">.</span>start((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> response<span class="pl-k">.</span>body(<span class="pl-s"><span class="pl-pds">"</span>Hello, World!<span class="pl-pds">"</span></span>));</pre></div>
+<div class="highlight highlight-source-java"><pre>server<span class="pl-k">.</span>start((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> response<span class="pl-k">.</span>done(<span class="pl-s"><span class="pl-pds">"</span>Hello, World!<span class="pl-pds">"</span></span>));</pre></div>
 
 <p>To stop the server, call the <em>stop</em> method:</p>
 
-<div class="highlight highlight-java"><pre>server<span class="pl-k">.</span>stop()</pre></div>
+<div class="highlight highlight-source-java"><pre>server<span class="pl-k">.</span>stop()</pre></div>
 
 <p>You can optionally specify the interface and port to bound to when creating the server, e.g. if you want to make your server globally available:</p>
 
-<div class="highlight highlight-java"><pre><span class="pl-smi">WebServer</span> server <span class="pl-k">=</span> <span class="pl-smi">WebServer</span><span class="pl-k">.</span>create(<span class="pl-s"><span class="pl-pds">"</span>0.0.0.0<span class="pl-pds">"</span></span>, <span class="pl-c1">8088</span>);</pre></div>
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">WebServer</span> server <span class="pl-k">=</span> <span class="pl-smi">WebServer</span><span class="pl-k">.</span>create(<span class="pl-s"><span class="pl-pds">"</span>0.0.0.0<span class="pl-pds">"</span></span>, <span class="pl-c1">8088</span>);</pre></div>
+
+<h2>
+<a id="asynchronous-processing" class="anchor" href="#asynchronous-processing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Asynchronous Processing</h2>
+
+<p>Molecule, uses <a href="http://www.simpleframework.org">Simple</a> as a default webserver. Both are fully asynchronous and non-blocking. 
+This allows the server to scale to very high loads and handle as many concurrent connections as possible, even when depending 
+on a high latency external resource.</p>
+
+<p>What this means is you can serve your response content from a thread separate to the original servicing thread. For instance your application 
+might need to wait for some remote process that takes some time to complete, such as an HTTP or SOAP request to an external server. You can simply 
+call this external resource from a different thread, and complete the response when you get the result.</p>
+
+<p>To tell the server that you're ready to serve the response, call the <em>done</em> method on the response 
+(see <a href="#asynchronous-processing">Asynchronous Processing</a>).</p>
+
+<p>Look at the <a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/async/AsyncExample.java">Asynchronous example</a>
+to see how to serve content from a separate thread.</p>
 
 <h2>
 <a id="routing" class="anchor" href="#routing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Routing</h2>
@@ -143,7 +135,7 @@ to run locally on port 8080.</p>
 <p>Routes let you map incoming requests to different applications based on the request verb and path. A route is composed
 of a path pattern, an optional set of verbs to match, and an application endpoint: </p>
 
-<div class="highlight highlight-java"><pre>server<span class="pl-k">.</span>start(<span class="pl-k">new</span> <span class="pl-smi">DynamicRoutes</span>() {{
+<div class="highlight highlight-source-java"><pre>server<span class="pl-k">.</span>start(<span class="pl-k">new</span> <span class="pl-smi">DynamicRoutes</span>() {{
     get(<span class="pl-s"><span class="pl-pds">"</span>/posts/:id<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>to((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
         <span class="pl-c">// retrieve a given post</span>
     });
@@ -170,7 +162,7 @@ render a 404 Not Found. This can be configured to pass the control to any defaul
 <p>By default, a route matches a single verb, specified by the method you use, i.e. <em>get</em>, <em>post</em>, <em>put</em>, <em>delete</em>.
 That can be changed by providing the verbs as arguments to the <em>via</em> method:</p>
 
-<div class="highlight highlight-java"><pre>map(<span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>via(<span class="pl-c1">GET</span>, <span class="pl-c1">HEAD</span>)<span class="pl-k">.</span>to((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
+<div class="highlight highlight-source-java"><pre>map(<span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>via(<span class="pl-c1">GET</span>, <span class="pl-c1">HEAD</span>)<span class="pl-k">.</span>to((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
     <span class="pl-c">// show the home page</span>
 });</pre></div>
 
@@ -182,10 +174,10 @@ That can be changed by providing the verbs as arguments to the <em>via</em> meth
 <p>Route patterns can be matched exactly - they are said to be static - or can include named parameters,
  which are then accessible as regular request parameters on the request object:</p>
 
-<div class="highlight highlight-java"><pre><span class="pl-c">// matches "GET /photos/18" and "GET /photos/25"</span>
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// matches "GET /photos/18" and "GET /photos/25"</span>
 <span class="pl-c">// request.parameter("id") is either '18' or '25'</span>
 get(<span class="pl-s"><span class="pl-pds">"</span>/photos/:id<span class="pl-pds">"</span></span>, (request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
-    response<span class="pl-k">.</span>body(<span class="pl-s"><span class="pl-pds">"</span>Photo #<span class="pl-pds">"</span></span> <span class="pl-k">+</span> request<span class="pl-k">.</span>parameter(<span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>));
+    response<span class="pl-k">.</span>done(<span class="pl-s"><span class="pl-pds">"</span>Photo #<span class="pl-pds">"</span></span> <span class="pl-k">+</span> request<span class="pl-k">.</span>parameter(<span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>));
 });</pre></div>
 
 <h3>
@@ -204,9 +196,6 @@ get(<span class="pl-s"><span class="pl-pds">"</span>/photos/:id<span class="pl-p
 <h3>
 <a id="attributes" class="anchor" href="#attributes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Attributes</h3>
 
-<h3>
-<a id="cookies" class="anchor" href="#cookies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cookies</h3>
-
 <h2>
 <a id="working-with-the-response" class="anchor" href="#working-with-the-response" aria-hidden="true"><span class="octicon octicon-link"></span></a>Working with the Response</h2>
 
@@ -218,6 +207,9 @@ get(<span class="pl-s"><span class="pl-pds">"</span>/photos/:id<span class="pl-p
 
 <h3>
 <a id="redirection-and-errors" class="anchor" href="#redirection-and-errors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Redirection and Errors</h3>
+
+<h2>
+<a id="cookies" class="anchor" href="#cookies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cookies</h2>
 
 <h2>
 <a id="sessions" class="anchor" href="#sessions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sessions</h2>
@@ -268,7 +260,7 @@ has several benefits:</p>
 <p>Molecule comes with a number of middlewares (more are coming), that you can use to build your processing pipeline:</p>
 
 <ul>
-<li>Router (See <a href="http://https://github.com/testinfected/molecule#routing">Routing</a>)</li>
+<li>Router (See <a href="#routing">Routing</a>)</li>
 <li>Static Assets </li>
 <li>File Server</li>
 <li>Access Log</li>
@@ -282,6 +274,7 @@ has several benefits:</p>
 <li>Date Header</li>
 <li>Content-Length Header</li>
 <li>Filter Map</li>
+<li>URL Map</li>
 <li>Cookie Session Tracker</li>
 <li>Fail Safe</li>
 <li>Failure Monitor</li>
@@ -289,24 +282,14 @@ has several benefits:</p>
 <li>Http Method Override</li>
 <li>Layout</li>
 </ul>
-        </section>
 
-        <aside id="sidebar">
-          <a href="https://github.com/testinfected/molecule/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/testinfected/molecule/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/testinfected/molecule">Molecule</a> is maintained by <a href="https://github.com/testinfected">testinfected</a>.</span>
 
-          <p class="repo-owner"><a href="https://github.com/testinfected/molecule"></a> is maintained by <a href="https://github.com/testinfected">testinfected</a>.</p>
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
 
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
-    </div>
+    </section>
 
             <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
@@ -314,7 +297,7 @@ has several benefits:</p>
           </script>
           <script type="text/javascript">
             try {
-              var pageTracker = _gat._getTracker("UA-16545808-1");
+              var pageTracker = _gat._getTracker("UA-16545808-2");
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
