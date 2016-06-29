@@ -29,7 +29,7 @@
       <div class="inner clearfix">
         <section id="main-content">
           <h2>
-<a id="quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quick Start</h2>
+<a id="quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Quick Start</h2>
 
 <div class="highlight highlight-source-java"><pre><span class="pl-k">public</span> <span class="pl-k">class</span> <span class="pl-en">HelloWorld</span> {
     <span class="pl-k">public</span> <span class="pl-k">static</span> <span class="pl-k">void</span> <span class="pl-en">main</span>(<span class="pl-k">String</span>[] <span class="pl-v">args</span>) <span class="pl-k">throws</span> <span class="pl-smi">IOException</span> {
@@ -43,14 +43,14 @@
 <p><code>http://localhost:8080</code></p>
 
 <h2>
-<a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
+<a id="download" class="anchor" href="#download" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Download</h2>
 
 <p>You can get the latest release version from Maven Central:</p>
 
 <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
       &lt;<span class="pl-ent">groupId</span>&gt;com.vtence.molecule&lt;/<span class="pl-ent">groupId</span>&gt;
       &lt;<span class="pl-ent">artifactId</span>&gt;molecule&lt;/<span class="pl-ent">artifactId</span>&gt;
-      &lt;<span class="pl-ent">version</span>&gt;0.9.1&lt;/<span class="pl-ent">version</span>&gt;
+      &lt;<span class="pl-ent">version</span>&gt;0.10&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <p>If you want the development version, grab the latest snapshot from Sonatype snapshots repositories 
@@ -59,7 +59,7 @@
 <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
       &lt;<span class="pl-ent">groupId</span>&gt;com.vtence.molecule&lt;/<span class="pl-ent">groupId</span>&gt;
       &lt;<span class="pl-ent">artifactId</span>&gt;molecule&lt;/<span class="pl-ent">artifactId</span>&gt;
-      &lt;<span class="pl-ent">version</span>&gt;0.10-SNAPSHOT&lt;/<span class="pl-ent">version</span>&gt;
+      &lt;<span class="pl-ent">version</span>&gt;0.11-SNAPSHOT&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <p>To use the default web server, you also need to add <a href="http://www.simpleframework.org">Simple</a> as a dependency:</p>
@@ -71,7 +71,7 @@
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <h2>
-<a id="want-to-start-with-some-code" class="anchor" href="#want-to-start-with-some-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Want to start with some code?</h2>
+<a id="want-to-start-with-some-code" class="anchor" href="#want-to-start-with-some-code" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Want to start with some code?</h2>
 
 <p>Try out the following examples:</p>
 
@@ -83,6 +83,7 @@
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/rest/RESTExample.java">REST</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/async/AsyncExample.java">Asynchronous Processing</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/cookies/CookiesExample.java">Cookies</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/flash/FlashExample.java">Flash</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/locale/LocaleNegotiationExample.java">Locale Negotiation</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/multipart/MultipartExample.java">Multipart Forms</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/templating/TemplatingAndLayoutExample.java">View Templates and Layout</a></li>
@@ -96,7 +97,7 @@
 </ul>
 
 <h2>
-<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span class="octicon octicon-link"></span></a>Getting Started</h2>
+<a id="getting-started" class="anchor" href="#getting-started" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting Started</h2>
 
 <p>First thing first, you need a server to run your app:</p>
 
@@ -118,24 +119,22 @@ to run locally on port 8080.</p>
 <div class="highlight highlight-source-java"><pre><span class="pl-smi">WebServer</span> server <span class="pl-k">=</span> <span class="pl-smi">WebServer</span><span class="pl-k">.</span>create(<span class="pl-s"><span class="pl-pds">"</span>0.0.0.0<span class="pl-pds">"</span></span>, <span class="pl-c1">8088</span>);</pre></div>
 
 <h2>
-<a id="asynchronous-processing" class="anchor" href="#asynchronous-processing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Asynchronous Processing</h2>
+<a id="asynchronous-processing" class="anchor" href="#asynchronous-processing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Asynchronous Processing</h2>
 
-<p>Molecule, uses <a href="http://www.simpleframework.org">Simple</a> as a default webserver. Both are fully asynchronous and non-blocking. 
-This allows the server to scale to very high loads and handle as many concurrent connections as possible, even when depending 
-on a high latency external resource.</p>
+<p>Molecule uses <a href="http://www.simpleframework.org">Simple</a> as a default webserver.
+Both are fully asynchronous and non-blocking. This allows the server to scale to very high loads and handle as many concurrent connections as possible, even when depending on a high latency external resource.</p>
 
 <p>What this means is you can serve your response content from a thread separate to the original servicing thread. For instance your application 
 might need to wait for some remote process that takes some time to complete, such as an HTTP or SOAP request to an external server. You can simply 
 call this external resource from a different thread, and complete the response when you get the result.</p>
 
-<p>To tell the server that you're ready to serve the response, call the <em>done</em> method on the response 
-(see <a href="#asynchronous-processing">Asynchronous Processing</a>).</p>
+<p>To tell the server that you're ready to serve the response, call the <em>done</em> method on the response.</p>
 
 <p>Look at the <a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/async/AsyncExample.java">Asynchronous example</a>
 to see how to serve content from a separate thread.</p>
 
 <h2>
-<a id="routing" class="anchor" href="#routing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Routing</h2>
+<a id="routing" class="anchor" href="#routing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Routing</h2>
 
 <p>Most modern webapps have nice URLs. Simple URLs are also easier to remember and more user friendly. </p>
 
@@ -163,7 +162,7 @@ of a path pattern, an optional set of verbs to match, and an application endpoin
 }});</pre></div>
 
 <h3>
-<a id="matching" class="anchor" href="#matching" aria-hidden="true"><span class="octicon octicon-link"></span></a>Matching</h3>
+<a id="matching" class="anchor" href="#matching" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Matching</h3>
 
 <p>Routes are matched in the order they are defined. If not defined route matches, the default behaviour is to 
 render a 404 Not Found. This can be configured to pass the control to any default application.</p>
@@ -178,7 +177,7 @@ That can be changed by providing the verbs as arguments to the <em>via</em> meth
 <p>If you don't provide any verbs, <em>map</em> will match on all verbs.</p>
 
 <h3>
-<a id="dynamic-parameters" class="anchor" href="#dynamic-parameters" aria-hidden="true"><span class="octicon octicon-link"></span></a>Dynamic Parameters</h3>
+<a id="dynamic-parameters" class="anchor" href="#dynamic-parameters" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dynamic Parameters</h3>
 
 <p>Route patterns can be matched exactly - they are said to be static - or can include named parameters,
  which are then accessible as regular request parameters on the request object:</p>
@@ -190,50 +189,50 @@ get(<span class="pl-s"><span class="pl-pds">"</span>/photos/:id<span class="pl-p
 });</pre></div>
 
 <h3>
-<a id="custom-matching" class="anchor" href="#custom-matching" aria-hidden="true"><span class="octicon octicon-link"></span></a>Custom Matching</h3>
+<a id="custom-matching" class="anchor" href="#custom-matching" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Custom Matching</h3>
 
 <p>You are not limited to the provided match patterns. You can easily implement your own matcher and decide exactly how to match an incoming url to an application.</p>
 
 <p>To do this, use the route definition methods that accept a <em>Matcher</em> rather than a <em>String</em>.</p>
 
 <h2>
-<a id="working-with-the-request" class="anchor" href="#working-with-the-request" aria-hidden="true"><span class="octicon octicon-link"></span></a>Working with the Request</h2>
+<a id="working-with-the-request" class="anchor" href="#working-with-the-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Working with the Request</h2>
 
 <h3>
-<a id="request-object" class="anchor" href="#request-object" aria-hidden="true"><span class="octicon octicon-link"></span></a>Request Object</h3>
+<a id="request-object" class="anchor" href="#request-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Request Object</h3>
 
 <h3>
-<a id="attributes" class="anchor" href="#attributes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Attributes</h3>
+<a id="attributes" class="anchor" href="#attributes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Attributes</h3>
 
 <h2>
-<a id="working-with-the-response" class="anchor" href="#working-with-the-response" aria-hidden="true"><span class="octicon octicon-link"></span></a>Working with the Response</h2>
+<a id="working-with-the-response" class="anchor" href="#working-with-the-response" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Working with the Response</h2>
 
 <h3>
-<a id="response-object" class="anchor" href="#response-object" aria-hidden="true"><span class="octicon octicon-link"></span></a>Response Object</h3>
+<a id="response-object" class="anchor" href="#response-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Response Object</h3>
 
 <h3>
-<a id="bodies" class="anchor" href="#bodies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bodies</h3>
+<a id="bodies" class="anchor" href="#bodies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bodies</h3>
 
 <h3>
-<a id="redirection-and-errors" class="anchor" href="#redirection-and-errors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Redirection and Errors</h3>
+<a id="redirection-and-errors" class="anchor" href="#redirection-and-errors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Redirection and Errors</h3>
 
 <h2>
-<a id="cookies" class="anchor" href="#cookies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Cookies</h2>
+<a id="cookies" class="anchor" href="#cookies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cookies</h2>
 
 <h2>
-<a id="sessions" class="anchor" href="#sessions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sessions</h2>
+<a id="sessions" class="anchor" href="#sessions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sessions</h2>
 
 <h2>
-<a id="rendering-templates" class="anchor" href="#rendering-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rendering Templates</h2>
+<a id="rendering-templates" class="anchor" href="#rendering-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rendering Templates</h2>
 
 <h2>
-<a id="view-layouts" class="anchor" href="#view-layouts" aria-hidden="true"><span class="octicon octicon-link"></span></a>View Layouts</h2>
+<a id="view-layouts" class="anchor" href="#view-layouts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>View Layouts</h2>
 
 <h2>
-<a id="testing" class="anchor" href="#testing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Testing</h2>
+<a id="testing" class="anchor" href="#testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Testing</h2>
 
 <h2>
-<a id="middlewares" class="anchor" href="#middlewares" aria-hidden="true"><span class="octicon octicon-link"></span></a>Middlewares</h2>
+<a id="middlewares" class="anchor" href="#middlewares" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Middlewares</h2>
 
 <p>Middlewares are a way to enhance your application with optional building blocks, using a pipeline design. </p>
 
@@ -264,7 +263,7 @@ has several benefits:</p>
 </ol>
 
 <h3>
-<a id="available-middlewares" class="anchor" href="#available-middlewares" aria-hidden="true"><span class="octicon octicon-link"></span></a>Available Middlewares</h3>
+<a id="available-middlewares" class="anchor" href="#available-middlewares" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Available Middlewares</h3>
 
 <p>Molecule comes with a number of middlewares (more are coming), that you can use to build your processing pipeline:</p>
 
@@ -272,10 +271,11 @@ has several benefits:</p>
 <li>Router (See <a href="#routing">Routing</a>)</li>
 <li>Static Assets </li>
 <li>File Server</li>
-<li>Access Log</li>
+<li>Apache Common Logger</li>
+<li>Apache Combined Logger</li>
 <li>Cookies</li>
 <li>Locale Negotiation</li>
-<li>Compression</li>
+<li>Compressor</li>
 <li>ETag</li>
 <li>Conditional Get</li>
 <li>Connection Scope</li>
@@ -285,11 +285,12 @@ has several benefits:</p>
 <li>Filter Map</li>
 <li>URL Map</li>
 <li>Cookie Session Tracker</li>
-<li>Fail Safe</li>
+<li>Failsafe</li>
 <li>Failure Monitor</li>
 <li>Not Found</li>
 <li>Http Method Override</li>
 <li>Layout</li>
+<li>Flash</li>
 </ul>
         </section>
 
