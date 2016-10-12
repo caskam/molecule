@@ -53,15 +53,6 @@
       &lt;<span class="pl-ent">version</span>&gt;0.10&lt;/<span class="pl-ent">version</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
-<p>If you want the development version, grab the latest snapshot from Sonatype snapshots repositories 
-(<code>https://oss.sonatype.org/content/repositories/snapshots</code>):</p>
-
-<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
-      &lt;<span class="pl-ent">groupId</span>&gt;com.vtence.molecule&lt;/<span class="pl-ent">groupId</span>&gt;
-      &lt;<span class="pl-ent">artifactId</span>&gt;molecule&lt;/<span class="pl-ent">artifactId</span>&gt;
-      &lt;<span class="pl-ent">version</span>&gt;0.11-SNAPSHOT&lt;/<span class="pl-ent">version</span>&gt;
-&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
-
 <p>To use the default web server, you also need to add <a href="http://www.simpleframework.org">Simple</a> as a dependency:</p>
 
 <div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
@@ -93,6 +84,7 @@
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/middleware/CustomMiddlewareExample.java">Creating a Custom Middleware</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/performance/CachingAndCompressionExample.java">Caching and Compression</a></li>
 <li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/ssl/SSLExample.java">SSL</a></li>
+<li><a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/auth/BasicAuthExample.java">Basic Authentication</a></li>
 <li><a href="https://github.com/testinfected/simple-petstore/blob/master/webapp/src/main/java/org/testinfected/petstore/PetStore.java">A Sample Application</a></li>
 </ul>
 
@@ -128,7 +120,7 @@ Both are fully asynchronous and non-blocking. This allows the server to scale to
 might need to wait for some remote process that takes some time to complete, such as an HTTP or SOAP request to an external server. You can simply 
 call this external resource from a different thread, and complete the response when you get the result.</p>
 
-<p>To tell the server that you're ready to serve the response, call the <em>done</em> method on the response.</p>
+<p>To tell the server that you're ready to serve the response, call the <code>done</code> method on the response.</p>
 
 <p>Look at the <a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/async/AsyncExample.java">Asynchronous example</a>
 to see how to serve content from a separate thread.</p>
@@ -184,7 +176,7 @@ That can be changed by providing the verbs as arguments to the <em>via</em> meth
 
 <div class="highlight highlight-source-java"><pre><span class="pl-c">// matches "GET /photos/18" and "GET /photos/25"</span>
 <span class="pl-c">// request.parameter("id") is either '18' or '25'</span>
-get(<span class="pl-s"><span class="pl-pds">"</span>/photos/:id<span class="pl-pds">"</span></span>, (request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
+get(<span class="pl-s"><span class="pl-pds">"</span>/photos/:id<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>to((request, response) <span class="pl-k">-</span><span class="pl-k">&gt;</span> {
     response<span class="pl-k">.</span>done(<span class="pl-s"><span class="pl-pds">"</span>Photo #<span class="pl-pds">"</span></span> <span class="pl-k">+</span> request<span class="pl-k">.</span>parameter(<span class="pl-s"><span class="pl-pds">"</span>id<span class="pl-pds">"</span></span>));
 });</pre></div>
 
@@ -198,35 +190,353 @@ get(<span class="pl-s"><span class="pl-pds">"</span>/photos/:id<span class="pl-p
 <h2>
 <a id="working-with-the-request" class="anchor" href="#working-with-the-request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Working with the Request</h2>
 
+<p>Applications receive a <code>Request</code> that provide information about the request coming in from the client.</p>
+
+<p>The request represents the environment for the client request, including the headers, the request body as well as parameters and other common things. The <code>Request</code> object is built from information provided by the HTTP server. </p>
+
+<p>Any middleware can modify the content of the request during processing before passing control to the next stage of the middleware pipeline. This of course has no effect on the original HTTP request. See <a href="#middlewares">Middlewares</a> for more information on middlewares and the middleware pipeline.</p>
+
 <h3>
-<a id="request-object" class="anchor" href="#request-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Request Object</h3>
+<a id="request" class="anchor" href="#request" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Request</h3>
+
+<div class="highlight highlight-source-java"><pre>request<span class="pl-k">.</span>uri();                          <span class="pl-c">// the uri, e.g. /path?query</span>
+request<span class="pl-k">.</span>path();                         <span class="pl-c">// the path info, e.g. /foo</span>
+request<span class="pl-k">.</span>remoteIp();                     <span class="pl-c">// ip of the client</span>
+request<span class="pl-k">.</span>remoteHost();                   <span class="pl-c">// hostname of the client</span>
+request<span class="pl-k">.</span>remotePort();                   <span class="pl-c">// port of the client</span>
+request<span class="pl-k">.</span>protocol();                     <span class="pl-c">// protocol, e.g. HTTP or HTTPS</span>
+request<span class="pl-k">.</span>timestamp();                    <span class="pl-c">// time the request came in</span>
+request<span class="pl-k">.</span>secure();                       <span class="pl-c">// whether the request was made over a secure connection</span>
+request<span class="pl-k">.</span>method();                       <span class="pl-c">// HTTP method (e.g.  GET, POST, PUT, etc.)</span>
+request<span class="pl-k">.</span>body();                         <span class="pl-c">// the body as a string, decoded using the request charset</span>
+request<span class="pl-k">.</span>bodyContent();                  <span class="pl-c">// the raw body content as bytes</span>
+request<span class="pl-k">.</span>bodyStream();                   <span class="pl-c">// the body as a stream of bytes</span>
+request<span class="pl-k">.</span>parts();                        <span class="pl-c">// list of parts of a multipart/form-data request</span>
+request<span class="pl-k">.</span>part(<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>);                   <span class="pl-c">// named part of a multipart/form-data request</span>
+request<span class="pl-k">.</span>charset();                      <span class="pl-c">// charset of the body, read from the content type</span>
+request<span class="pl-k">.</span>hasHeader(<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>);              <span class="pl-c">// checks presence of a named header</span>
+request<span class="pl-k">.</span>header(<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>);                 <span class="pl-c">// value of a given HTTP header</span>
+request<span class="pl-k">.</span>headers(<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>);                <span class="pl-c">// list of values of a given HTTP header</span>
+request<span class="pl-k">.</span>headerNames();                  <span class="pl-c">// the set of HTTP header names received</span>
+request<span class="pl-k">.</span>contentLength();                <span class="pl-c">// length of the body</span>
+request<span class="pl-k">.</span>contentType();                  <span class="pl-c">// content type of the body</span>
+request<span class="pl-k">.</span>hasParameter(<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>)            <span class="pl-c">// checks for the presence of a request parameter</span>
+request<span class="pl-k">.</span>parameter(<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>);              <span class="pl-c">// value of a specific request parameter</span>
+request<span class="pl-k">.</span>paremeters(<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>);             <span class="pl-c">// list of values for a specific request parameter</span>
+request<span class="pl-k">.</span>parameterNames();               <span class="pl-c">// set of all request parameter names</span>
+request<span class="pl-k">.</span>allParameters();                <span class="pl-c">// map of all request parameters</span>
+request<span class="pl-k">.</span>attribute(<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span>);               <span class="pl-c">// value of a keyed attribute</span>
+request<span class="pl-k">.</span>attribute(<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span>);      <span class="pl-c">// sets the value of a keyed attribute</span>
+request<span class="pl-k">.</span>attributeKeys();                <span class="pl-c">// set of all attibute keys</span>
+request<span class="pl-k">.</span>removeAttribute(<span class="pl-s"><span class="pl-pds">"</span>key<span class="pl-pds">"</span></span>);         <span class="pl-c">// removes a keyed attribute</span>
+request<span class="pl-k">.</span>attributes();                   <span class="pl-c">// map of all request attributes</span></pre></div>
+
+<p>For the complete documentation, see the Javadoc of the <code>Request</code> class.</p>
 
 <h3>
 <a id="attributes" class="anchor" href="#attributes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Attributes</h3>
 
+<p>Request attributes are not sent by the client - as opposed to request parameters. They are used for server-side processing only.</p>
+
+<p>Attributes are a local server storage mechanism, scoped within the request. Whereas request parameters are string literals, request attributes can be any type of <code>Object</code>s.</p>
+
 <h2>
 <a id="working-with-the-response" class="anchor" href="#working-with-the-response" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Working with the Response</h2>
 
-<h3>
-<a id="response-object" class="anchor" href="#response-object" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Response Object</h3>
+<p>Applications respond to client requests by sending data back to the client using the <code>Response</code>. </p>
+
+<p>The response includes a status code and text, headers and an optional body. </p>
+
+<p>Any middleware can modify the content of the response during processing before returning control to the previous stage of the middleware pipeline. See <a href="#middlewares">Middlewares</a> for more information on middlewares and the middleware pipeline.</p>
 
 <h3>
-<a id="bodies" class="anchor" href="#bodies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Bodies</h3>
+<a id="response" class="anchor" href="#response" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Response</h3>
+
+<div class="highlight highlight-source-java"><pre>response<span class="pl-k">.</span>status(<span class="pl-smi">HttpStatus</span><span class="pl-c1"><span class="pl-k">.</span>OK</span>);         <span class="pl-c">// sets the status</span>
+response<span class="pl-k">.</span>statusCode(<span class="pl-c1">400</span>);               <span class="pl-c">// sets the status code</span>
+response<span class="pl-k">.</span>statusText(<span class="pl-s"><span class="pl-pds">"</span>Bad Request<span class="pl-pds">"</span></span>);     <span class="pl-c">// sets the status text</span>
+response<span class="pl-k">.</span>redirect(<span class="pl-s"><span class="pl-pds">"</span>/url<span class="pl-pds">"</span></span>);              <span class="pl-c">// 303 redirect to /url</span>
+response<span class="pl-k">.</span>header(<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span>);       <span class="pl-c">// sets the single value of a named header</span>
+response<span class="pl-k">.</span>addHeader(<span class="pl-s"><span class="pl-pds">"</span>name<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>value<span class="pl-pds">"</span></span>);    <span class="pl-c">// adds another value to a named header</span>
+response<span class="pl-k">.</span>contentType(<span class="pl-s"><span class="pl-pds">"</span>text/html<span class="pl-pds">"</span></span>);      <span class="pl-c">// sets the Content-Type header of the response</span>
+response<span class="pl-k">.</span>contentLength(<span class="pl-c1">16384</span>);          <span class="pl-c">// sets the Content-Length header of the response</span>
+response<span class="pl-k">.</span>charset(<span class="pl-s"><span class="pl-pds">"</span>utf-8<span class="pl-pds">"</span></span>);              <span class="pl-c">// sets the charset of the response body</span>
+response<span class="pl-k">.</span>body(<span class="pl-s"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span>);                  <span class="pl-c">// sets the response body as text</span>
+response<span class="pl-k">.</span>done();                        <span class="pl-c">// sends the response to the client</span>
+response<span class="pl-k">.</span>done(<span class="pl-s"><span class="pl-pds">"</span>text<span class="pl-pds">"</span></span>);                  <span class="pl-c">// sends the specified response text to the client</span></pre></div>
+
+<p>For the complete documentation, see the Javadoc of the <code>Response</code> class.</p>
+
+<p>Note that no response will actually be sent back to the client until the <code>done</code> method is called.
+Calling <code>done</code> signals the end of the request processing and triggers sending back the status, 
+headers and body.</p>
 
 <h3>
-<a id="redirection-and-errors" class="anchor" href="#redirection-and-errors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Redirection and Errors</h3>
+<a id="rendering" class="anchor" href="#rendering" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rendering</h3>
+
+<p>There are a variety of ways to send back a response to the client. You can render text, binary content, 
+the content of a file, XML, JSON, use a view template or render nothing at all. You can specify the content type or HTTP status of the rendered response as well.</p>
+
+<p>Molecule uses the concept of response <code>Body</code> to represent data to send back to the client.</p>
+
+<p>Molecule comes with a few body implementations ready to use for sending text, binary content, the content of a file or
+ a view template.</p>
+
+<h4>
+<a id="rendering-an-empty-response" class="anchor" href="#rendering-an-empty-response" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rendering an empty response</h4>
+
+<p>You can render an empty response by not specifying a body at all. In which case, an empty body is used. </p>
+
+<p>So this is perfectly valid:</p>
+
+<div class="highlight highlight-source-java"><pre>response<span class="pl-k">.</span>done();</pre></div>
+
+<h4>
+<a id="rendering-text" class="anchor" href="#rendering-text" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rendering text</h4>
+
+<p>You can send plain text - with no markup at all - back to the browser like this:</p>
+
+<div class="highlight highlight-source-java"><pre>response<span class="pl-k">.</span>done(<span class="pl-s"><span class="pl-pds">"</span>All good<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>Rendering pure text is sometimes useful if you're client is expecting something other than proper HTML.</p>
+
+<h4>
+<a id="rendering-html" class="anchor" href="#rendering-html" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rendering HTML</h4>
+
+<p>You can send an HTML string back to the browser by using a text body to render:</p>
+
+<div class="highlight highlight-source-java"><pre>response<span class="pl-k">.</span>done(<span class="pl-s"><span class="pl-pds">"</span>&lt;html&gt;&lt;body&gt;&lt;h1&gt;It Works&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>This can be useful when you're rendering a small snippet of HTML code. However, you might want to consider moving it to a template file if the markup is complex. See <a href="#view-templates">View Templating</a> for more on using templates. </p>
+
+<h4>
+<a id="rendering-json" class="anchor" href="#rendering-json" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rendering JSON</h4>
+
+<p>You can send back JSON to the browser by using a text body. Here's an example using google Gson library:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">Gson</span> gson <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Gson</span>();
+response<span class="pl-k">.</span>done(gson<span class="pl-k">.</span>toJSON(<span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>));</pre></div>
+
+<p>Another option would be to create a your own body implementation - let's call it <code>JSONBody</code> - 
+and use your preferred JSON serializer:</p>
+
+<div class="highlight highlight-source-java"><pre>response<span class="pl-k">.</span>done(<span class="pl-k">new</span> <span class="pl-smi">JSONBody</span>(<span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>));</pre></div>
+
+<p>or with a static factory method:</p>
+
+<div class="highlight highlight-source-java"><pre>response<span class="pl-k">.</span>done(json(<span class="pl-s"><span class="pl-pds">"</span>ok<span class="pl-pds">"</span></span>));</pre></div>
+
+<p>Rendering XML can be done the same way.</p>
+
+<h4>
+<a id="rendering-binary-content" class="anchor" href="#rendering-binary-content" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rendering binary content</h4>
+
+<p>You can send back a raw body as binary like this:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-k">byte</span>[] content <span class="pl-k">=</span> <span class="pl-c1">...</span> <span class="pl-c">//</span>
+response<span class="pl-k">.</span>body(content)<span class="pl-k">.</span>done();</pre></div>
+
+<h4>
+<a id="rendering-the-content-of-a-file" class="anchor" href="#rendering-the-content-of-a-file" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rendering the content of a file</h4>
+
+<p>You can use a <code>FileBody</code> to stream the content of a file:</p>
+
+<div class="highlight highlight-source-java"><pre> response<span class="pl-k">.</span>render(<span class="pl-k">new</span> <span class="pl-smi">FileBody</span>(<span class="pl-k">new</span> <span class="pl-smi">File</span>(<span class="pl-s"><span class="pl-pds">"</span>/path/to/file<span class="pl-pds">"</span></span>))))<span class="pl-k">.</span>done();</pre></div>
+
+<p>This will use a default chunk size of <code>8K</code>, although you can specify a different chunk size.</p>
+
+<h4>
+<a id="redirection" class="anchor" href="#redirection" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Redirection</h4>
+
+<p>You can trigger a browser redirect using a See Other (303) status code 
+using the <code>redirectTo</code> method on the <code>Response</code>:</p>
+
+<div class="highlight highlight-source-java"><pre>response<span class="pl-k">.</span>redirectTo(<span class="pl-s"><span class="pl-pds">"</span>/url<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>done();</pre></div>
+
+<p>If you need to use a different status code, simply change the status: </p>
+
+<div class="highlight highlight-source-java"><pre>response<span class="pl-k">.</span>redirectTo(<span class="pl-s"><span class="pl-pds">"</span>/url<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>statusCode(<span class="pl-c1">301</span>)<span class="pl-k">.</span>done(); <span class="pl-c">// moved permanently</span></pre></div>
 
 <h2>
 <a id="cookies" class="anchor" href="#cookies" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Cookies</h2>
 
+<p>To enable cookies support first add the <code>Cookies</code> middleware to your middleware pipeline (see <a href="#middlewares">Middlewares</a> for more information on using middlewares).</p>
+
+<p>This will create a <code>CookieJar</code> and populate that cookie jar with cookies sent by the client. The cookie jar is available as a request attribute:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">CookieJar</span> cookies <span class="pl-k">=</span> <span class="pl-smi">CookieJar</span><span class="pl-k">.</span>get(request);</pre></div>
+
+<p>To read cookies sent by the client:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">Cookie</span> customer <span class="pl-k">=</span> cookies<span class="pl-k">.</span>get(<span class="pl-s"><span class="pl-pds">"</span>customer<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>To send back cookies to the client, all you have to do is add cookies to the jar:</p>
+
+<div class="highlight highlight-source-java"><pre>cookies<span class="pl-k">.</span>add(<span class="pl-s"><span class="pl-pds">"</span>weapon<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>rocket launcher<span class="pl-pds">"</span></span>)
+       .path(<span class="pl-s"><span class="pl-pds">"</span>/ammo<span class="pl-pds">"</span></span>)
+       .maxAge(<span class="pl-c1">30</span>)</pre></div>
+
+<p>To expire a cookie, discard it from the jar:</p>
+
+<div class="highlight highlight-source-java"><pre>cookies<span class="pl-k">.</span>discard(<span class="pl-s"><span class="pl-pds">"</span>weapon<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>path(<span class="pl-s"><span class="pl-pds">"</span>/ammo<span class="pl-pds">"</span></span>);</pre></div>
+
+<p>For more on cookies, see the <a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/cookies/CookiesExample.java">Cookies example</a>.</p>
+
 <h2>
 <a id="sessions" class="anchor" href="#sessions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Sessions</h2>
 
+<h3>
+<a id="enabling-sessions-support" class="anchor" href="#enabling-sessions-support" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Enabling sessions support</h3>
+
+<p>To use sessions you need to start your server with session support:</p>
+
+<div class="highlight highlight-source-java"><pre>server<span class="pl-k">.</span>add(<span class="pl-k">new</span> <span class="pl-smi">Cookies</span>())
+      .add(<span class="pl-k">new</span> <span class="pl-smi">CookieSessionTracker</span>(<span class="pl-smi">CookieSessionStore</span><span class="pl-k">.</span>secure(<span class="pl-s"><span class="pl-pds">"</span>your secret<span class="pl-pds">"</span></span>);))
+      .start(<span class="pl-k">new</span> <span class="pl-smi">DynamicRoutes</span>() {{
+      <span class="pl-c">// your routing here</span>
+}}</pre></div>
+
+<p>Since HTTP is a stateless protocol and Molecule uses a minimalist approach, sessions are not part of the request. 
+Usage of sessions requires the use of a middleware. This means you have full control over the way sessions are tracked and stored.</p>
+
+<p>Molecule comes with a <code>CookieSessionTracker</code> middleware that uses cookies to track sessions across HTTP requests and two session storage mechanisms:</p>
+
+<ul>
+<li>An in memory session store, the <code>SessionPool</code>
+</li>
+<li>A client side storage using encrypted cookies, the <code>CookieSessionStore</code> </li>
+</ul>
+
+<h3>
+<a id="using-sessions" class="anchor" href="#using-sessions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using sessions</h3>
+
+<p>Once session support is enabled, the current session is bound to the request:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">Session</span> session <span class="pl-k">=</span> <span class="pl-smi">Session</span><span class="pl-k">.</span>get(request);</pre></div>
+
+<p>One thing to understand is that as long as your server is started with session support, there will <em>always</em> be a session bound to the request. There's no need to check against <code>null</code>. There's no need to ask for session creation either. </p>
+
+<p>The session attached to the request can be a fresh and empty session or the session opened in a previous request. This does not mean a new session is automatically opened for each request though. A fresh session is only persisted if it is modified before the end of the request cycle. This means you can safely read from a new session. </p>
+
+<p>If you write data to the session then it is automatically persisted to the session store you've selected - created in case of a new session or updated in case of an existing session. If you invalidate the session, it will be discarded from the session store automatically.</p>
+
+<p>Some of the things you can do with sessions include:</p>
+
+<pre><code>session.fresh()             // checks if session is new
+session.id()                // gets the session id
+session.createdAt()         // the session creation time
+session.updatedAd()         // the last session update time
+session.expires()           // whether this session expires
+session.expirationTime()    // this session expiration time, if it expires
+session.maxAge(30)          // sets the session to expire after 30s of inactivity
+session.contains("key")     // checks if this session contains a keyed attribute
+session.get("key")          // returns the keyed attribute
+session.remove("key")       // removes a keyed attribute
+session.put("key", "value") // writes a key value pair to the session
+session.clear()             // clears the session content
+session.invalidate()        // invalidates the session
+</code></pre>
+
+<p>For more on using sessions, see the <a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/session/SessionExample.java">Session Example</a>.</p>
+
 <h2>
-<a id="rendering-templates" class="anchor" href="#rendering-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rendering Templates</h2>
+<a id="view-templates" class="anchor" href="#view-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>View Templates</h2>
+
+<p>When your markup becomes complex, you might want to consider moving it to a template file.</p>
+
+<p>Rendering a template requires a <code>RenderingEngine</code>. To use the built-in <code>JMustacheRenderer</code>, first
+  add <a href="https://github.com/samskivert/jmustache">JMustache</a> to your dependencies:</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;com.samskivert&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;jmustache&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;1.13&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<p>Rendering a template takes a view model and returns a body object to use with the response. Assuming
+ a Mustache template file named <i>profile.mustache</i>, here's how we would render the template 
+ using an hypothetical <code>Employee</code> object: </p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// Declare the template engine</span>
+<span class="pl-smi">Templates</span> templates <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Templates</span>(<span class="pl-k">new</span> <span class="pl-smi">JMustacheRenderer</span>()<span class="pl-k">.</span>fromDir(<span class="pl-k">new</span> <span class="pl-smi">File</span>(<span class="pl-s"><span class="pl-pds">"</span>/path/to/template/files<span class="pl-pds">"</span></span>)));
+<span class="pl-c">// Load the 'profile.mustache' template</span>
+<span class="pl-k">Template&lt;<span class="pl-smi">Employee</span>&gt;</span> profile <span class="pl-k">=</span> templates<span class="pl-k">.</span>named(<span class="pl-s"><span class="pl-pds">"</span>profile<span class="pl-pds">"</span></span>);
+<span class="pl-c">// Render the template using an Employee instance </span>
+response<span class="pl-k">.</span>done(profile<span class="pl-k">.</span>render(<span class="pl-k">new</span> <span class="pl-smi">Employee</span>(<span class="pl-s"><span class="pl-pds">"</span>Bob<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>...<span class="pl-pds">"</span></span>)));</pre></div>
+
+<p>For further information on using view templates, take a look at the <a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/templating/TemplatingAndLayoutExample.java">View Templates and Layout example</a>.</p>
 
 <h2>
 <a id="view-layouts" class="anchor" href="#view-layouts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>View Layouts</h2>
+
+<p>Sometimes you want to share a common look and feel for a set of pages. This is when view layouts can help.</p>
+
+<p>Layouts are just templates that are used to decorate existing pages. A layout defines the surroundings of your HTML page. 
+It's where you define a common look and feel of your final output. This reverses the common pattern of 
+including shared headers and footers in many templates to isolate changes in repeated setups.</p>
+
+<p>Think of the layout rendering process in two steps. </p>
+
+<p>The first step processes the generated HTML view to extract its content. 
+This extraction process makes individual pieces of the original page content available to the layout template:</p>
+
+<ul>
+<li>the head content, excluding the title</li>
+<li>the title</li>
+<li>the body content</li>
+<li>all the meta parameters</li>
+</ul>
+
+<p>The second step merges the content pieces with the layout template to produce the final
+result. </p>
+
+<p>Here's a contrived example of a mustache layout template that simply recreates the original page:</p>
+
+<div class="highlight highlight-text-html-basic"><pre>&lt;<span class="pl-ent">html</span>&gt;
+&lt;<span class="pl-ent">head</span>&gt;
+{{head}}
+&lt;<span class="pl-ent">title</span>&gt;{{title}}&lt;/<span class="pl-ent">title</span>&gt;
+&lt;/<span class="pl-ent">head</span>&gt;
+&lt;<span class="pl-ent">body</span>&gt;
+{{body}}
+&lt;/<span class="pl-ent">body</span>&gt;
+&lt;/<span class="pl-ent">html</span>&gt;</pre></div>
+
+<p>The <code>Layout</code> middleware intercepts generated HTML responses and merges them with layout decorator(s) 
+to build the final result:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// Declare the template engine</span>
+<span class="pl-smi">Templates</span> layouts <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Templates</span>(<span class="pl-k">new</span> <span class="pl-smi">JMustacheRenderer</span>()<span class="pl-k">.</span>fromDir(<span class="pl-k">new</span> <span class="pl-smi">File</span>(<span class="pl-s"><span class="pl-pds">"</span>/path/to/layout/templates<span class="pl-pds">"</span></span>)));
+<span class="pl-c">// Load the main layout template</span>
+<span class="pl-k">Template&lt;<span class="pl-k">Map&lt;<span class="pl-smi">String</span>, <span class="pl-smi">String</span>&gt;</span>&gt;</span> mainLayout <span class="pl-k">=</span> layouts<span class="pl-k">.</span>named(<span class="pl-s"><span class="pl-pds">"</span>main<span class="pl-pds">"</span></span>);
+
+<span class="pl-c">// Apply the main site layout to requests under the / path, in other words to all rendered pages</span>
+server<span class="pl-k">.</span>filter(<span class="pl-s"><span class="pl-pds">"</span>/<span class="pl-pds">"</span></span>, <span class="pl-smi">Layout</span><span class="pl-k">.</span>html(mainLayout))
+      .start(<span class="pl-k">new</span> <span class="pl-smi">DynamicRoutes</span>() {{
+          <span class="pl-c">// Your routes definitions here</span>
+          <span class="pl-c">// ...</span>
+      }});
+</pre></div>
+
+<p>For more on using layouts, take a look at the <a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/templating/TemplatingAndLayoutExample.java">View Templates and Layout example</a>.</p>
+
+<h2>
+<a id="ssl" class="anchor" href="#ssl" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>SSL</h2>
+
+<p>To use HTTPS connections, enable SSL on the <code>WebServer</code>. Enabling HTTPS/SSL requires you to have a keystore file, which you can generate using the Java <code>keytool</code>. You specify the location of your keystore, the keystore password 
+and the keys password like this:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">WebServer</span> server <span class="pl-k">=</span> <span class="pl-smi">WebServer</span><span class="pl-k">.</span>create();
+server<span class="pl-k">.</span>enableSSL(<span class="pl-k">new</span> <span class="pl-smi">File</span>(<span class="pl-s"><span class="pl-pds">"</span>/path/to/keystore/file<span class="pl-pds">"</span></span>), <span class="pl-s"><span class="pl-pds">"</span>keyStorePassword<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>keyPassword<span class="pl-pds">"</span></span>))
+      .start(<span class="pl-c1">...</span>);</pre></div>
+
+<p>This will start the server with TLS enabled, trusting all clients.</p>
+
+<p>If you need more control over the type of keystore and algorithms used, you can alternatively pass 
+an <code>javax.net.ssl.SSLContext</code> to use.</p>
+
+<p>See the <a href="https://github.com/testinfected/molecule/blob/master/src/test/java/examples/ssl/SSLExample.java">SSL example</a> 
+for more details.</p>
 
 <h2>
 <a id="testing" class="anchor" href="#testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Testing</h2>
@@ -234,11 +544,11 @@ get(<span class="pl-s"><span class="pl-pds">"</span>/photos/:id<span class="pl-p
 <h2>
 <a id="middlewares" class="anchor" href="#middlewares" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Middlewares</h2>
 
-<p>Middlewares are a way to enhance your application with optional building blocks, using a pipeline design. </p>
+<p>Middlewares are a way to enhance your application with optional building blocks, using a pipeline design. A middleware component sits between the client and the server, processing inbound requests and outbound responses.</p>
 
-<p>They implement functionality you tend to need across all your applications,
+<p>Middlewares implement functionality you tend to need across all your applications,
 but you don't want to build everytime. Things like <strong>access logging</strong>, <strong>authentication</strong>, 
-<strong>compression</strong>, <strong>static files</strong>, <strong>routing</strong>, etc. </p>
+<strong>compression</strong>, <strong>static files</strong>, <strong>routing</strong>, etc.</p>
 
 <p>Being able to separate the processing of the request (and post-processing of the response) in different stages 
 has several benefits:</p>
@@ -255,17 +565,80 @@ has several benefits:</p>
 <ol>
 <li>Capturing internal server errors to render a nice 500 page</li>
 <li>Monitoring, logging accesses to the server</li>
-<li>Authentication and authorisation, to control access to your applicatin</li>
+<li>Authentication and authorisation, to control access to your applicatoin</li>
 <li>Caching, returning a cached result if request has already been processed recently</li>
 <li>Compression, to reduce bandwith usage</li>
 <li>Security, to prevent attacks such as CSRF</li>
-<li>Processing, to actually process the request</li>
+<li>Processing, the actual request processing by your application</li>
 </ol>
+
+<h3>
+<a id="the-middleware-stack" class="anchor" href="#the-middleware-stack" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>The Middleware Stack</h3>
+
+<p>You can think of the Middleware pipeline as a stack, at the bottom of which is your application. When a request comes in, it starts at the top of the stack and goes down until it is processed by your application. The response then goes up the stack backwards through the middleware chain, before it is sent back to the client. </p>
+
+<p>We call it a middleware stack because each part will call the next part in sequence. Or it might not. In fact there are two types of middlewares. Those that modify the request or response and call the next step in the chain, and those that short circuit the stack and return their own response without ever calling anything further down the stack.</p>
+
+<h3>
+<a id="building-the-middleware-stack" class="anchor" href="#building-the-middleware-stack" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Building the Middleware Stack</h3>
+
+<p>The simplest way to build your middleware stack is to add middlewares to your WebServer. </p>
+
+<p>For example, suppose we'd like to enhance performance of our application by adding caching and compression:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">WebServer</span> server <span class="pl-k">=</span> <span class="pl-smi">WebServer</span><span class="pl-k">.</span>create();
+server<span class="pl-k">.</span>add(<span class="pl-k">new</span> <span class="pl-smi">ContentLengthHeader</span>())
+      .add(<span class="pl-k">new</span> <span class="pl-smi">ConditionalGet</span>())
+      .add(<span class="pl-k">new</span> <span class="pl-smi">ETag</span>())
+      .add(<span class="pl-k">new</span> <span class="pl-smi">Compressor</span>())
+      .start(<span class="pl-k">new</span> <span class="pl-smi">DynamicRoutes</span>() {{
+          <span class="pl-c">// ...</span>
+      }});</pre></div>
+
+<p>Here's what a more complete, real-life middleware stack might look like:</p>
+
+<div class="highlight highlight-source-java"><pre>server<span class="pl-k">.</span>failureReporter(failureReporter)
+      .add(<span class="pl-k">new</span> <span class="pl-smi">ServerHeader</span>(<span class="pl-s"><span class="pl-pds">"</span>Simple/6.0.1<span class="pl-pds">"</span></span>))
+      .add(<span class="pl-k">new</span> <span class="pl-smi">DateHeader</span>())
+      .add(<span class="pl-k">new</span> <span class="pl-smi">ApacheCommonLogger</span>(logger))
+      <span class="pl-c">// a custom middleware to redirect non secure requests to HTTPS </span>
+      .add(<span class="pl-k">new</span> <span class="pl-smi">ForceSSL</span>())
+      .add(<span class="pl-k">new</span> <span class="pl-smi">ContentLengthHeader</span>())
+      .mount(<span class="pl-s"><span class="pl-pds">"</span>/api<span class="pl-pds">"</span></span>, <span class="pl-k">new</span> <span class="pl-smi">MiddlewareStack</span>() {{
+          use(<span class="pl-k">new</span> <span class="pl-smi">Failsafe</span>());
+          use(<span class="pl-k">new</span> <span class="pl-smi">FailureMonitor</span>(failureReporter));
+          use(<span class="pl-k">new</span> <span class="pl-smi">ConnectionScope</span>(database));
+          <span class="pl-c">// runs the api application</span>
+          run(api());
+      }})
+      .add(<span class="pl-k">new</span> <span class="pl-smi">ConditionalGet</span>())
+      .add(<span class="pl-k">new</span> <span class="pl-smi">ETag</span>())
+      .add(<span class="pl-k">new</span> <span class="pl-smi">Compressor</span>()<span class="pl-k">.</span>compressibleTypes(<span class="pl-c1">CSS</span>, <span class="pl-c1">HTML</span>))
+      <span class="pl-c">// configures the StaticAssets middleware</span>
+      .add(staticAssets())
+      .add(<span class="pl-k">new</span> <span class="pl-smi">HttpMethodOverride</span>())
+      .add(<span class="pl-k">new</span> <span class="pl-smi">Cookies</span>())
+      <span class="pl-c">// a custom middleware to redirect based on the preferred user locale</span>
+      .add(selectLocale())
+      <span class="pl-c">// a custom middleware to display static pages if case of errors</span>
+      .add(<span class="pl-k">new</span> <span class="pl-smi">PublicExceptions</span>())
+      .add(<span class="pl-k">new</span> <span class="pl-smi">Failsafe</span>())
+      .add(<span class="pl-k">new</span> <span class="pl-smi">FailureMonitor</span>(failureReporter))
+      .add(<span class="pl-k">new</span> <span class="pl-smi">ConnectionScope</span>(dataSource))
+      .add(<span class="pl-k">new</span> <span class="pl-smi">CookieSessionTracker</span>(<span class="pl-smi">CookieSessionStore</span><span class="pl-k">.</span>secure(<span class="pl-s"><span class="pl-pds">"</span>secret<span class="pl-pds">"</span></span>)))
+      .add(<span class="pl-k">new</span> <span class="pl-smi">Flash</span>())
+      <span class="pl-c">// starts the main application</span>
+      .start(webapp());</pre></div>
+
+<p>For more on using middlewares, take a look at the various code examples (see above), 
+including the <a href="https://github.com/testinfected/simple-petstore/blob/master/webapp/src/main/java/org/testinfected/petstore/PetStore.java">sample application</a>.</p>
+
+<p>The javadoc of the <code>WebServer</code> class is another good source of information. </p>
 
 <h3>
 <a id="available-middlewares" class="anchor" href="#available-middlewares" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Available Middlewares</h3>
 
-<p>Molecule comes with a number of middlewares (more are coming), that you can use to build your processing pipeline:</p>
+<p>Molecule comes with a bunch of handy middlewares that you can use to build your processing pipeline:</p>
 
 <ul>
 <li>Router (See <a href="#routing">Routing</a>)</li>
@@ -273,7 +646,7 @@ has several benefits:</p>
 <li>File Server</li>
 <li>Apache Common Logger</li>
 <li>Apache Combined Logger</li>
-<li>Cookies</li>
+<li>Cookies (See <a href="#cookies">Cookies</a>)</li>
 <li>Locale Negotiation</li>
 <li>Compressor</li>
 <li>ETag</li>
@@ -292,6 +665,19 @@ has several benefits:</p>
 <li>Layout</li>
 <li>Flash</li>
 </ul>
+
+<h2>
+<a id="living-on-the-edge" class="anchor" href="#living-on-the-edge" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Living on the edge</h2>
+
+<p>If you want the latest development version, grab the latest snapshot from <a href="https://oss.sonatype.org/content/repositories/snapshots">Sonatype snapshots repositories</a>:</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+      &lt;<span class="pl-ent">groupId</span>&gt;com.vtence.molecule&lt;/<span class="pl-ent">groupId</span>&gt;
+      &lt;<span class="pl-ent">artifactId</span>&gt;molecule&lt;/<span class="pl-ent">artifactId</span>&gt;
+      &lt;<span class="pl-ent">version</span>&gt;0.11-SNAPSHOT&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<p>New snapshots are pushed to Sonatype on every commit. So you'll always be running the head version. </p>
         </section>
 
         <aside id="sidebar">
