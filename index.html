@@ -76,6 +76,7 @@ or provide your own implementations. </p>
       &lt;<span class="pl-ent">groupId</span>&gt;org.simpleframework&lt;/<span class="pl-ent">groupId</span>&gt;
       &lt;<span class="pl-ent">artifactId</span>&gt;simple-http&lt;/<span class="pl-ent">artifactId</span>&gt;
       &lt;<span class="pl-ent">version</span>&gt;6.0.1&lt;/<span class="pl-ent">version</span>&gt;
+      &lt;<span class="pl-ent">scope</span>&gt;runtime&lt;/<span class="pl-ent">scope</span>&gt;
 &lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
 
 <h2>
@@ -557,6 +558,91 @@ for more details.</p>
 
 <h2>
 <a id="testing" class="anchor" href="#testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Testing</h2>
+
+<p>Molecule provides fluent assertion helpers for unit testing your application endpoints and middlewares.
+ It also provides a test HTTP client for integration testing your server.</p>
+
+<p>Add the testing jar to your dependencies to benefit from the test HTTP client and fluent assertion helpers:</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+      &lt;<span class="pl-ent">groupId</span>&gt;com.vtence.molecule&lt;/<span class="pl-ent">groupId</span>&gt;
+      &lt;<span class="pl-ent">artifactId</span>&gt;molecule-tests&lt;/<span class="pl-ent">artifactId</span>&gt;
+      &lt;<span class="pl-ent">version</span>&gt;0.10&lt;/<span class="pl-ent">version</span>&gt;
+      &lt;<span class="pl-ent">scope</span>&gt;test&lt;/<span class="pl-ent">scope</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<p>You will also need to add <a href="http://hamcrest.org/JavaHamcrest/">Hamcrest</a> to your list of dependencies:</p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+    &lt;<span class="pl-ent">groupId</span>&gt;org.hamcrest&lt;/<span class="pl-ent">groupId</span>&gt;
+    &lt;<span class="pl-ent">artifactId</span>&gt;java-hamcrest&lt;/<span class="pl-ent">artifactId</span>&gt;
+    &lt;<span class="pl-ent">version</span>&gt;2.0.0.0&lt;/<span class="pl-ent">version</span>&gt;
+    &lt;<span class="pl-ent">scope</span>&gt;test&lt;/<span class="pl-ent">scope</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<h3>
+<a id="unit-testing-middlewares-and-application-endpoints" class="anchor" href="#unit-testing-middlewares-and-application-endpoints" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Unit Testing Middlewares and Application Endpoints</h3>
+
+<p>The <code>Request</code> and <code>Response</code> are plain Java objects that you can use directly in your unit tests. They are simple 
+representations of the environment for the client request  and the content of the response your application 
+wants to send back. They are not wrappers around the actual HTTP request and response, so there's no need to mock
+ them:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">Request</span> request <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Request</span>();
+<span class="pl-smi">Response</span> response <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">Response</span>();
+
+request<span class="pl-k">.</span>header(<span class="pl-s"><span class="pl-pds">"</span>Authorization<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Basic <span class="pl-pds">"</span></span> <span class="pl-k">+</span> mime<span class="pl-k">.</span>encode(<span class="pl-s"><span class="pl-pds">"</span>joe:bad secret<span class="pl-pds">"</span></span>));
+
+<span class="pl-c">// Call your application endpoint</span>
+authentication<span class="pl-k">.</span>handle(request, response);
+
+<span class="pl-c">// Make assertions on the response</span>
+<span class="pl-c">// ...</span>
+</pre></div>
+
+<h4>
+<a id="fluent-assertions" class="anchor" href="#fluent-assertions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Fluent Assertions</h4>
+
+<p><code>ResponseAssert</code> provides a fluent interface for asserting the generated response. Based on
+the previous example:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-c">// ...</span>
+assertThat(response)<span class="pl-k">.</span>hasStatus(<span class="pl-c1">UNAUTHORIZED</span>)
+                    .hasHeader(<span class="pl-s"><span class="pl-pds">"</span>WWW-Authenticate<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Basic realm=<span class="pl-cce">\"</span>WallyWorld<span class="pl-cce">\"</span><span class="pl-pds">"</span></span>)
+                    .hasContentType(<span class="pl-s"><span class="pl-pds">"</span>text/plain<span class="pl-pds">"</span></span>)
+                    .isEmpty()
+                    .isDone();</pre></div>
+
+<p><code>RequestAssert</code> helps make assertions on the request:</p>
+
+<div class="highlight highlight-source-java"><pre>assertThat(request)<span class="pl-k">.</span>hasAttribute(<span class="pl-s"><span class="pl-pds">"</span>username<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>joe<span class="pl-pds">"</span></span>);</pre></div>
+
+<p><code>CookieJarAssert</code> and <code>CookieAssert</code> both provide fluent assertions for <code>Cookie</code>s and the <code>CookieJar</code>: </p>
+
+<div class="highlight highlight-source-java"><pre>assertThat(cookieJar)<span class="pl-k">.</span>hasCookie(<span class="pl-s"><span class="pl-pds">"</span>session<span class="pl-pds">"</span></span>)
+                     .hasValue(<span class="pl-s"><span class="pl-pds">"</span>sJaAMRYetEJhQcS9s283pMrlGoXr88LkFf0NCOTZb8A<span class="pl-pds">"</span></span>)
+                     .isHttpOnly();</pre></div>
+
+<h3>
+<a id="integration-testing" class="anchor" href="#integration-testing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Integration Testing</h3>
+
+<p>You can use the test HTTP client to write integration tests for your API or 
+test how various parts of your web application interact:</p>
+
+<div class="highlight highlight-source-java"><pre><span class="pl-smi">HttpRequest</span> request <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">HttpRequest</span>(<span class="pl-c1">8080</span>)<span class="pl-k">.</span>followRedirects(<span class="pl-c1">false</span>);
+<span class="pl-smi">HttpResponse</span> response <span class="pl-k">=</span> request<span class="pl-k">.</span>content(<span class="pl-smi">Form</span><span class="pl-k">.</span>urlEncoded()<span class="pl-k">.</span>addField(<span class="pl-s"><span class="pl-pds">"</span>username<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>bob<span class="pl-pds">"</span></span>)
+                                                         .addField(<span class="pl-s"><span class="pl-pds">"</span>password<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>secret<span class="pl-pds">"</span></span>))
+                               .post(<span class="pl-s"><span class="pl-pds">"</span>/login<span class="pl-pds">"</span></span>);</pre></div>
+
+<h4>
+<a id="fluent-assertions-1" class="anchor" href="#fluent-assertions-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Fluent Assertions</h4>
+
+<p><code>HttpResponseAssert</code> and <code>HttpCookieAssert</code> provides fluent interfaces for making assertions on the HTTP response
+and cookies:</p>
+
+<div class="highlight highlight-source-java"><pre>assertThat(response)<span class="pl-k">.</span>hasStatusCode(<span class="pl-c1">303</span>)
+                    .hasHeader(<span class="pl-s"><span class="pl-pds">"</span>Location<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>/users/bob<span class="pl-pds">"</span></span>)
+                    .hasCookie(<span class="pl-s"><span class="pl-pds">"</span>session<span class="pl-pds">"</span></span>)<span class="pl-k">.</span>hasMaxAge(<span class="pl-c1">300</span>);</pre></div>
 
 <h2>
 <a id="middlewares" class="anchor" href="#middlewares" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Middlewares</h2>
